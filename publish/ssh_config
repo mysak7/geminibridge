@@ -1,0 +1,7 @@
+# Add this block to ~/.ssh/config
+# Then connect with:  ssh gemini
+
+Host gemini
+    HostName gemini
+    User mi
+    StrictHostKeyChecking accept-new
