@@ -23,8 +23,8 @@ A production-ready FastAPI wrapper around the **Google Gemini CLI** that exposes
 |---|---|---|
 | Backend CLI | `claude` (`@anthropic-ai/claude-code`) | `gemini` (`@google/gemini-cli`) |
 | CLI flag for auto-approve | `--dangerously-skip-permissions --no-session-persistence` | `--yolo` |
-| Default API port | `8001` | `8003` |
-| Default UI port | `8002` | `8004` |
+| Default API port | `8001` | `8011` |
+| Default UI port | `8002` | `8012` |
 | Auth credentials | `~/.claude` (browser OAuth) | `GEMINI_API_KEY` or `~/.gemini` (Google OAuth) |
 | Pricing estimate | Claude Sonnet ($3/$15 per 1M tokens) | Gemini 2.0 Flash ($0.10/$0.40 per 1M tokens) |
 | Model name in responses | `claude-code` | `gemini` |
@@ -76,14 +76,14 @@ docker compose up -d
 ### API endpoint
 
 ```
-POST http://localhost:8003/v1/chat/completions
+POST http://localhost:8011/v1/chat/completions
 Authorization: Bearer <API_KEY>
 Content-Type: application/json
 ```
 
 ### Raw prompt
 ```bash
-curl -X POST http://localhost:8003/v1/chat/completions \
+curl -X POST http://localhost:8011/v1/chat/completions \
   -H "Authorization: Bearer test" \
   -H "Content-Type: application/json" \
   -d '{"prompt": "What is 2+2?"}'
@@ -91,7 +91,7 @@ curl -X POST http://localhost:8003/v1/chat/completions \
 
 ### OpenAI messages format
 ```bash
-curl -X POST http://localhost:8003/v1/chat/completions \
+curl -X POST http://localhost:8011/v1/chat/completions \
   -H "Authorization: Bearer test" \
   -H "Content-Type: application/json" \
   -d '{"model": "gemini", "messages": [{"role": "user", "content": "Hello!"}]}'
@@ -99,7 +99,7 @@ curl -X POST http://localhost:8003/v1/chat/completions \
 
 ### Streaming
 ```bash
-curl -X POST http://localhost:8003/v1/chat/completions \
+curl -X POST http://localhost:8011/v1/chat/completions \
   -H "Authorization: Bearer test" \
   -H "Content-Type: application/json" \
   -d '{"stream": true, "messages": [{"role": "user", "content": "Count to 5"}]}'
@@ -109,7 +109,7 @@ curl -X POST http://localhost:8003/v1/chat/completions \
 ```python
 from openai import OpenAI
 
-client = OpenAI(base_url="http://localhost:8003/v1", api_key="test")
+client = OpenAI(base_url="http://localhost:8011/v1", api_key="test")
 resp = client.chat.completions.create(
     model="gemini",
     messages=[{"role": "user", "content": "Hello!"}],
@@ -121,7 +121,7 @@ print(resp.choices[0].message.content)
 ```python
 from langchain_openai import ChatOpenAI
 
-llm = ChatOpenAI(base_url="http://localhost:8003/v1", api_key="test", model="gemini")
+llm = ChatOpenAI(base_url="http://localhost:8011/v1", api_key="test", model="gemini")
 llm.invoke("Explain Gemini in one sentence")
 ```
 
@@ -132,10 +132,10 @@ llm.invoke("Explain Gemini in one sentence")
 ```bash
 make ui
 # or
-uvicorn chat_ui:app --host 0.0.0.0 --port 8004
+uvicorn chat_ui:app --host 0.0.0.0 --port 8012
 ```
 
-Open `http://localhost:8004` — provides Chat, History, Dashboard, and Agents tabs.
+Open `http://localhost:8012` — provides Chat, History, Dashboard, and Agents tabs.
 
 ---
 
@@ -147,7 +147,7 @@ make down     # docker compose down
 make logs     # tail container logs
 make build    # build Docker image
 make rebuild  # force rebuild + restart
-make ui       # start chat UI on port 8004
+make ui       # start chat UI on port 8012
 make test     # run test_hello.py + test_greeting.py
 make smoke    # quick curl test
 ```
@@ -161,7 +161,7 @@ make smoke    # quick curl test
 | `API_KEY` | `test` | Bearer token for the bridge endpoint |
 | `GEMINI_API_KEY` | *(empty)* | Google AI API key (alternative to OAuth) |
 | `DB_PATH` | `/data/chat_history.db` | SQLite database path inside container |
-| `BRIDGE_URL` | `http://localhost:8003/v1/chat/completions` | URL chat_ui.py uses to reach the API |
+| `BRIDGE_URL` | `http://localhost:8011/v1/chat/completions` | URL chat_ui.py uses to reach the API |
 | `BRIDGE_KEY` | `test` | API key chat_ui.py sends to the bridge |
 
 ---
@@ -172,7 +172,7 @@ make smoke    # quick curl test
 client
   │  POST /v1/chat/completions
   ▼
-FastAPI  api.py  (Docker, port 8000 → 8003 on host)
+FastAPI  api.py  (Docker, port 8000 → 8011 on host)
   │
   ├─ stream=false  →  write prompt to /workspace/input_<uuid>.txt
   │                   gemini -p "read + write result to output file" --yolo
@@ -181,7 +181,7 @@ FastAPI  api.py  (Docker, port 8000 → 8003 on host)
   └─ stream=true   →  gemini -p "<prompt>" --yolo
                       pipe stdout chunks as SSE → client
 
-chat_ui.py  (host, port 8004)  →  calls localhost:8003  →  Gemini CLI
+chat_ui.py  (host, port 8012)  →  calls localhost:8011  →  Gemini CLI
 SQLite DB  (shared volume /home/mi/geminibridge/)
 ```
 
@@ -196,7 +196,7 @@ Change only the base URL:
 client = OpenAI(base_url="http://ras:8001/v1", api_key="test")
 
 # After (geminibridge)
-client = OpenAI(base_url="http://ras:8003/v1", api_key="test")
+client = OpenAI(base_url="http://ras:8011/v1", api_key="test")
 ```
 
 Everything else — request format, response format, streaming, LangChain integration — is identical.

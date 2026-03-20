@@ -21,8 +21,8 @@ if [[ -z "${API_KEY:-}" ]]; then
 fi
 [[ -n "$API_KEY" ]] || error "API_KEY is required."
 
-read -rp "  Port to expose the API on [8003]: " PORT
-PORT="${PORT:-8003}"
+read -rp "  Port to expose the API on [8011]: " PORT
+PORT="${PORT:-8011}"
 
 # ─── 2. Install Node.js (LTS) ────────────────────────────────────────────────
 if command -v node &>/dev/null; then

@@ -11,7 +11,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 DB_PATH = os.environ.get("DB_PATH", "/home/mi/geminibridge/chat_history.db")
-BRIDGE_URL = os.environ.get("BRIDGE_URL", "http://localhost:8003/v1/chat/completions")
+BRIDGE_URL = os.environ.get("BRIDGE_URL", "http://localhost:8011/v1/chat/completions")
 BRIDGE_KEY = os.environ.get("BRIDGE_KEY", "test")
 
 scheduler = AsyncIOScheduler()
@@ -497,7 +497,7 @@ HTML = """<!DOCTYPE html>
     <button id="tab-dashboard" onclick="switchTab('dashboard')">Dashboard</button>
     <button id="tab-agents" onclick="switchTab('agents')">Agents</button>
   </nav>
-  <span class="bridge-label">→ localhost:8003</span>
+  <span class="bridge-label">→ localhost:8011</span>
 </header>
 
 <!-- Chat -->

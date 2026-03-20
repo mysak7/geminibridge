@@ -2,7 +2,7 @@ services:
   geminibridge:
     build: .
     ports:
-      - "8003:8000"
+      - "8011:8000"
     environment:
       API_KEY: "test"
       DB_PATH: "/data/chat_history.db"

@@ -1,7 +1,7 @@
 .PHONY: help up down logs build rebuild ui test smoke
 
-API_PORT  ?= 8003
-UI_PORT   ?= 8004
+API_PORT  ?= 8011
+UI_PORT   ?= 8012
 API_KEY   ?= test
 BRIDGE_URL ?= http://localhost:$(API_PORT)
 

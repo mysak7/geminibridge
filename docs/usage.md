@@ -1,6 +1,6 @@
 # Gemini Bridge — Usage Guide
 
-**Host:** Raspberry Pi (`ras`) — bridge runs on port **8003**
+**Host:** Raspberry Pi (`ras`) — bridge runs on port **8011**
 
 ---
 
@@ -29,12 +29,12 @@ make rebuild  # force rebuild + restart
 
 | | |
 |---|---|
-| Base URL | `http://ras:8003` |
+| Base URL | `http://ras:8011` |
 | API key | `test` (set via `API_KEY` in docker-compose.yml) |
 
 ### 1. Raw prompt (legacy)
 ```bash
-curl -X POST http://ras:8003/v1/chat/completions \
+curl -X POST http://ras:8011/v1/chat/completions \
   -H "Authorization: Bearer test" \
   -H "Content-Type: application/json" \
   -d '{"prompt": "What is 2+2?"}'
@@ -42,7 +42,7 @@ curl -X POST http://ras:8003/v1/chat/completions \
 
 ### 2. OpenAI messages format
 ```bash
-curl -X POST http://ras:8003/v1/chat/completions \
+curl -X POST http://ras:8011/v1/chat/completions \
   -H "Authorization: Bearer test" \
   -H "Content-Type: application/json" \
   -d '{"model": "gemini", "messages": [{"role": "user", "content": "What is 2+2?"}]}'
@@ -50,7 +50,7 @@ curl -X POST http://ras:8003/v1/chat/completions \
 
 ### 3. Streaming (SSE)
 ```bash
-curl -X POST http://ras:8003/v1/chat/completions \
+curl -X POST http://ras:8011/v1/chat/completions \
   -H "Authorization: Bearer test" \
   -H "Content-Type: application/json" \
   -d '{"model": "gemini", "stream": true, "messages": [{"role": "user", "content": "Count to 5"}]}'
@@ -64,7 +64,7 @@ curl -X POST http://ras:8003/v1/chat/completions \
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="http://ras:8003/v1",
+    base_url="http://ras:8011/v1",
     api_key="test",
 )
 
@@ -90,7 +90,7 @@ for chunk in client.chat.completions.create(
 from langchain_openai import ChatOpenAI
 
 llm = ChatOpenAI(
-    base_url="http://ras:8003/v1",
+    base_url="http://ras:8011/v1",
     api_key="test",
     model="gemini",
     streaming=True,
@@ -107,10 +107,10 @@ Run on host (not in Docker):
 ```bash
 make ui
 # or
-uvicorn chat_ui:app --host 0.0.0.0 --port 8004
+uvicorn chat_ui:app --host 0.0.0.0 --port 8012
 ```
 
-Open `http://ras:8004` in a browser.
+Open `http://ras:8012` in a browser.
 
 ---
 
@@ -141,7 +141,7 @@ docker compose up -d       # container mounts ~/.gemini read-only
 client
   │  POST /v1/chat/completions
   ▼
-FastAPI (api.py, port 8000 inside container → 8003 on host)
+FastAPI (api.py, port 8000 inside container → 8011 on host)
   │
   ├─ stream=false  →  write prompt to /workspace/input_<id>.txt
   │                   gemini -p "read file, write to output_<id>.txt" --yolo

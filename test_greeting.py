@@ -1,7 +1,7 @@
 import time
 import requests
 
-API_URL = "http://10.77.77.11:8003/v1/chat/completions"
+API_URL = "http://10.77.77.11:8011/v1/chat/completions"
 API_KEY = "test"
 
 payload = {"prompt": "Pozdrav mě česky a řekni mi vtip."}

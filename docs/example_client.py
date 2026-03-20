@@ -1,12 +1,12 @@
 """
 Gemini Bridge — client examples
 Requires: pip install openai langchain-openai
-Bridge running at http://ras:8003 with API_KEY=test
+Bridge running at http://ras:8011 with API_KEY=test
 """
 
 from openai import OpenAI
 
-BRIDGE_URL = "http://ras:8003/v1"
+BRIDGE_URL = "http://ras:8011/v1"
 API_KEY = "test"
 
 client = OpenAI(base_url=BRIDGE_URL, api_key=API_KEY)
@@ -137,7 +137,7 @@ if __name__ == "__main__":
     print("\n=== 5. LangChain RAG ===")
     documents = [
         "The GeminiBridge is a FastAPI wrapper around the Gemini CLI.",
-        "It exposes an OpenAI-compatible /v1/chat/completions endpoint on port 8003.",
+        "It exposes an OpenAI-compatible /v1/chat/completions endpoint on port 8011.",
         "It supports both streaming and non-streaming responses.",
     ]
     print(langchain_rag_example(documents, "What port does GeminiBridge run on?"))
