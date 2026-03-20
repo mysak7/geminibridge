@@ -1,0 +1,18 @@
+services:
+  geminibridge:
+    build: .
+    ports:
+      - "8003:8000"
+    environment:
+      API_KEY: "test"
+      DB_PATH: "/data/chat_history.db"
+      # Gemini authentication: set GEMINI_API_KEY here or in a .env file.
+      # Alternatively, mount OAuth credentials (see comment below).
+      GEMINI_API_KEY: "${GEMINI_API_KEY:-}"
+    volumes:
+      # Shared history DB — visible to both api.py (container) and chat_ui.py (host)
+      - /home/mi/geminibridge:/data
+      # Optional: mount host Gemini OAuth credentials so the CLI can authenticate
+      # without an API key. Comment out if using GEMINI_API_KEY instead.
+      - /home/mi/.gemini:/home/node/.gemini
+    restart: unless-stopped
