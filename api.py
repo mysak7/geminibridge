@@ -14,8 +14,8 @@ app = FastAPI()
 security = HTTPBearer()
 
 API_KEY = os.environ.get("API_KEY", "")
-WORKSPACE = "/workspace"
-DB_PATH = os.environ.get("DB_PATH", "/data/chat_history.db")
+WORKSPACE = os.environ.get("WORKSPACE", os.path.expanduser("~/geminibridge-app"))
+DB_PATH = os.environ.get("DB_PATH", os.path.expanduser("~/geminibridge/chat_history.db"))
 
 # Gemini 2.0 Flash pricing (per million tokens)
 PRICE_INPUT  = 0.10   # $0.10 / 1M input tokens
